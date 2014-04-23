@@ -1,8 +1,8 @@
 taverna-bioswr-perspective
 ==========================
 
-_[BioSWR](http://inb.bsc.es/BioSWR/) Registry plug-in for
-_[Taverna](http://www.taverna.org.uk/) Workbench.
+[BioSWR](http://inb.bsc.es/BioSWR/) Registry plug-in for
+[Taverna](http://www.taverna.org.uk/) Workbench.
 
 (c) 2014 Spanish National Bioinformatics Institute (INB),
     Barcelona Supercomputing Center and The University of Manchester
@@ -11,7 +11,7 @@ Introduction
 ------------
 
 BioSWR is a Semantic Web services Registry for Bioinformatics which uses 
-_[WSDL 2.0: RDF mapping](http://www.w3.org/TR/wsdl20-rdf/) ontology as a model.
+[WSDL 2.0: RDF mapping](http://www.w3.org/TR/wsdl20-rdf/) ontology as a model.
 
 This plug-in allows Web services discovery and annotation. 
 The selected services may be imported into Taverna Wokflow Designer.

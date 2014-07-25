@@ -41,7 +41,6 @@ import javax.xml.namespace.QName;
 import net.sf.taverna.t2.activities.rest.RESTActivity;
 import net.sf.taverna.t2.activities.rest.ui.servicedescription.GenericRESTTemplateService;
 import net.sf.taverna.t2.activities.rest.ui.servicedescription.RESTActivityIcon;
-import net.sf.taverna.t2.servicedescriptions.AbstractTemplateService;
 import net.sf.taverna.t2.servicedescriptions.ServiceDescription;
 import net.sf.taverna.t2.servicedescriptions.ServiceDescriptionProvider;
 import org.apache.ws.commons.schema.XmlSchema;
@@ -145,12 +144,13 @@ public class HTTPBindingTemplateService extends ServiceDescription implements Se
                         requestNode.put("httpMethod", httpMethod == null ? "GET" : httpMethod);
 
                         URI address = endpoint.getAddress();
+                        StringBuilder url = new StringBuilder(address.toString());
+                        
                         String location = operation.getExtensionAttribute(HTTPBindingOperationExtensions.HTTP_LOCATION_ATTR);
                         if (location != null) {
-                            address = address.resolve(location);
+                            url.append(location);
                         }
 
-                        StringBuilder url = new StringBuilder(address.toString());
                         String inputSerialization = ext.getHttpInputSerialization();
                         if ("application/x-www-form-urlencoded".equals(inputSerialization)) {
                             putUrlEncodedInputs(operation, httpMethod, headersNode, url);

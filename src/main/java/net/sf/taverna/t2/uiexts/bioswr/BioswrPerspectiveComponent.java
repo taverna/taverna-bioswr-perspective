@@ -24,6 +24,7 @@
 
 package net.sf.taverna.t2.uiexts.bioswr;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -48,6 +49,7 @@ import net.sf.taverna.t2.uiexts.bioswr.model.BioswrOntology;
 import net.sf.taverna.t2.uiexts.bioswr.ui.AnnotationsPanel;
 import net.sf.taverna.t2.uiexts.bioswr.ui.AnnotationsTreePanel;
 import net.sf.taverna.t2.uiexts.bioswr.ui.LoginPanel;
+import net.sf.taverna.t2.uiexts.bioswr.ui.SemanticTagsPanel;
 import net.sf.taverna.t2.uiexts.bioswr.ui.ServiceDescriptionPanel;
 import net.sf.taverna.t2.uiexts.bioswr.ui.WSDLTablePane;
 import net.sf.taverna.t2.uiexts.bioswr.ui.WSDLTreePanel;
@@ -89,7 +91,12 @@ public class BioswrPerspectiveComponent extends JPanel {
             }
         });
         final WSDLTablePane wsdlTable = new WSDLTablePane();
+        final SemanticTagsPanel tagsPanel = new SemanticTagsPanel(wsdlTable.table.sorter, wsdlTable.table.filter);
         
+        final JPanel servicesPanel = new JPanel(new BorderLayout());
+        servicesPanel.add(tagsPanel, BorderLayout.NORTH);
+        servicesPanel.add(wsdlTable, BorderLayout.CENTER);
+                
         final AnnotationsTreePanel annotationsTreePanel = new AnnotationsTreePanel();
 
         // AnnotationsTreePanel fires "wsdl.component" change event when annotation is added
@@ -124,7 +131,7 @@ public class BioswrPerspectiveComponent extends JPanel {
         hSplit.setResizeWeight(0.8);
         hSplit.setDividerLocation(0.8);
 
-        hSplit.setLeftComponent(wsdlTable);
+        hSplit.setLeftComponent(servicesPanel);
         
         JSplitPane vSplit = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
         vSplit.setContinuousLayout(true);

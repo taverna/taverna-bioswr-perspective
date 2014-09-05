@@ -44,5 +44,5 @@ public class EdamOntology extends AbstractOntology {
     @Override
     public String getOntologyURI() {
         return URI;
-    }    
+    }
 }

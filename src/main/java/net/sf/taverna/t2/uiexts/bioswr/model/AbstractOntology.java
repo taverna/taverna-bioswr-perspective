@@ -78,6 +78,13 @@ public abstract class AbstractOntology {
         return annotations;
     }
     
+    /**
+     * Returns rdfs:label annotation value for the axiom.
+     * 
+     * @param iri axiom resource identifier 
+     * 
+     * @return the value of rdfs:label of the axiom or null
+     */
     public synchronized String getLabel(final IRI iri) {
         final OWLOntology ontology = getOntology();
         if (ontology != null) {

@@ -25,14 +25,22 @@
 package net.sf.taverna.t2.uiexts.bioswr.model;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import net.sf.taverna.t2.uiexts.bioswr.config.BioswrConfig;
+import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLAnnotation;
 import org.semanticweb.owlapi.model.OWLAnnotationProperty;
 import org.semanticweb.owlapi.model.OWLAnnotationValue;
 import org.semanticweb.owlapi.model.OWLClassExpression;
+import org.semanticweb.owlapi.model.OWLDataProperty;
 import org.semanticweb.owlapi.model.OWLDatatype;
 import org.semanticweb.owlapi.model.OWLIndividual;
 import org.semanticweb.owlapi.model.OWLLiteral;
@@ -56,7 +64,8 @@ public class BioswrOntology extends AbstractOntology {
     protected final static String IMPLEMENTS_PROPERTY_IRI = "http://www.w3.org/ns/wsdl-rdf#implements";
     
     protected final static String BINDING_PROPERTY_IRI = "http://www.w3.org/ns/wsdl-rdf#usesBinding";
-    
+    protected final static String MODEL_REF_PROPERTY = "http://www.w3.org/ns/sawsdl#modelReference";
+
     protected final static String WSOAP = "http://www.w3.org/ns/wsdl/soap";
     protected final static String WHTTP = "http://www.w3.org/ns/wsdl/http";
     
@@ -170,4 +179,53 @@ public class BioswrOntology extends AbstractOntology {
         }
         return null;
     }
+    
+    /**
+     * Returns most frequent SAWSDL annotations found (ordered list) 
+     * @param type
+     * @return 
+     */
+    public List<String> getReferences(final String type) {
+        final Map<String, Integer> map = new HashMap();
+        
+        OWLOntology owlOntology = ontology.getOntology();
+        OWLAnnotationProperty modelReferenceProperty = OWLManager.getOWLDataFactory().getOWLAnnotationProperty(IRI.create(MODEL_REF_PROPERTY));
+        Set<OWLNamedIndividual> individuals = owlOntology.getIndividualsInSignature();
+        for (OWLNamedIndividual individual : individuals) {
+            final String fragment = individual.getIRI().toURI().getFragment();
+            if (fragment != null) {
+                if (type == null || type.isEmpty() ||
+                   (fragment.length() > type.length() &&
+                    fragment.startsWith(type)) &&
+                    fragment.charAt(type.length()) == '(') {
+                    Set<OWLAnnotation> annotations = individual.getAnnotations(owlOntology, modelReferenceProperty);
+                    for (OWLAnnotation annotation : annotations) {
+                        OWLAnnotationValue owlAnnotationValue = annotation.getValue();
+                        if (owlAnnotationValue instanceof OWLLiteral) {
+                            final OWLLiteral value = (OWLLiteral)owlAnnotationValue;
+                            String literal = value.getLiteral();
+                            Integer count = map.get(literal);
+                            if (count == null) {
+                                map.put(literal, 1);
+                            } else {
+                                map.put(literal, count + 1);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        ArrayList<String> references = new ArrayList(map.keySet());
+        Collections.sort(references, new Comparator<String>() {
+            @Override
+            public int compare(String s1, String s2) {
+                Integer i1 = map.get(s1);
+                Integer i2 = map.get(s2);
+                final int c = i2.compareTo(i1);
+                return c == 0 ? s1.compareToIgnoreCase(s2) : c;
+            }
+        });
+        return references;
+    } 
+
 }

@@ -43,13 +43,25 @@ public class DecoratorBorder implements Border {
     private final static Insets INSETS = new Insets(4,4,4,4);
 
     private Color color;
+    private final int ancle;
+    private final Insets insets;
 
     public DecoratorBorder() {
-        this(Color.RED);
+        this(Color.RED, ANCLE, INSETS);
     }
 
     public DecoratorBorder(Color color) {
+        this(color, ANCLE, INSETS);
+    }
+    
+    public DecoratorBorder(Color color, int ancle) {
+        this(color, ancle, INSETS);
+    }
+
+    public DecoratorBorder(Color color, int ancle, Insets insets) {
         this.color = color;
+        this.ancle = ancle;
+        this.insets = insets;
     }
 
     @Override
@@ -60,26 +72,26 @@ public class DecoratorBorder implements Border {
         g2.setColor(c.getBackground());
         Shape clip = g2.getClip();
 
-        g2.setClip(0, 0, width - 1, INSETS.top);
-        g2.fillRoundRect(x, y, width - 1, height - 1, ANCLE, ANCLE);
+        g2.setClip(0, 0, width - 1, insets.top);
+        g2.fillRoundRect(x, y, width - 1, height - 1, ancle, ancle);
 
-        g2.setClip(0, height - INSETS.bottom, width - 1, INSETS.bottom);
-        g2.fillRoundRect(x, y, width - 1, height - 1, ANCLE, ANCLE);
+        g2.setClip(0, height - insets.bottom, width - 1, INSETS.bottom);
+        g2.fillRoundRect(x, y, width - 1, height - 1, ancle, ancle);
 
-        g2.setClip(0, 0, INSETS.left, height - 1);
-        g2.fillRoundRect(x, y, width - 1, height - 1, ANCLE, ANCLE);
+        g2.setClip(0, 0, insets.left, height - 1);
+        g2.fillRoundRect(x, y, width - 1, height - 1, ancle, ancle);
 
-        g2.setClip(width - INSETS.right, 0, width - 1, height - 1);
-        g2.fillRoundRect(x, y, width - 1, height - 1, ANCLE, ANCLE);
+        g2.setClip(width - insets.right, 0, width - 1, height - 1);
+        g2.fillRoundRect(x, y, width - 1, height - 1, ancle, ancle);
 
         g2.setClip(clip);
         g2.setColor(color);
-        g2.drawRoundRect(x, y, width - 1, height - 1, ANCLE, ANCLE);
+        g2.drawRoundRect(x, y, width - 1, height - 1, ancle, ancle);
     }
 
     @Override
     public Insets getBorderInsets(Component c) {
-        return INSETS;
+        return insets;
     }
 
     @Override

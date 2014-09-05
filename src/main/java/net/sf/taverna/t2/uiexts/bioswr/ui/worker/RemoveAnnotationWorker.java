@@ -24,28 +24,13 @@
 
 package net.sf.taverna.t2.uiexts.bioswr.ui.worker;
 
-import java.io.IOException;
-import java.net.HttpURLConnection;
 import java.net.PasswordAuthentication;
-import java.util.Arrays;
-import java.util.HashSet;
-import javax.swing.SwingWorker;
 import net.sf.taverna.t2.uiexts.bioswr.model.BioswrOntology;
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpStatus;
-import org.apache.commons.httpclient.UsernamePasswordCredentials;
-import org.apache.commons.httpclient.auth.AuthScope;
-import org.apache.commons.httpclient.methods.PostMethod;
-import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLAnnotation;
 import org.semanticweb.owlapi.model.OWLAnnotationAssertionAxiom;
-import org.semanticweb.owlapi.model.OWLAnnotationValue;
-import org.semanticweb.owlapi.model.OWLDataFactory;
-import org.semanticweb.owlapi.model.OWLLiteral;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
-import org.semanticweb.owlapi.vocab.OWL2Datatype;
 
 /**
  * @author Dmitry Repchevsky

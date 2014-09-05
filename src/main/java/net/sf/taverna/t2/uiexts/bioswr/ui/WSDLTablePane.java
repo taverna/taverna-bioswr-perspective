@@ -33,7 +33,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JToolTip;
 import javax.swing.ListSelectionModel;
-import javax.swing.RowFilter;
 import javax.swing.SwingWorker;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
@@ -42,14 +41,12 @@ import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DocumentFilter;
 import javax.swing.text.PlainDocument;
-import net.sf.taverna.t2.uiexts.bioswr.model.BioswrOntology;
 import net.sf.taverna.t2.uiexts.bioswr.ui.util.BlockablePanel;
 import net.sf.taverna.t2.uiexts.bioswr.ui.util.ExTableHeader;
 import net.sf.taverna.t2.uiexts.bioswr.ui.util.ExTableHeader.ExTableColumn;
 import net.sf.taverna.t2.uiexts.bioswr.ui.util.ExTableHeader.ExTableColumnModel;
 import net.sf.taverna.t2.uiexts.bioswr.ui.util.HtmlToolTip;
 import net.sf.taverna.t2.uiexts.bioswr.ui.worker.GetAllServicesWorker;
-import org.semanticweb.owlapi.model.OWLNamedIndividual;
 import org.semanticweb.owlapi.model.OWLOntology;
 
 /**
@@ -88,6 +85,9 @@ public class WSDLTablePane extends BlockablePanel {
     
     public static class WSDLTable extends JTable implements PropertyChangeListener {
         
+        public final TableRowSorter<TableModel> sorter;
+        public final ServiceFilter filter;
+
         private final ServicePermissionsCellRenderer permissionsRenderer;
         private final ServiceCellRenderer serviceCellRenderer;
         
@@ -133,8 +133,8 @@ public class WSDLTablePane extends BlockablePanel {
             TableColumn col3 = getColumnModel().getColumn(3);
             col3.setCellRenderer(new ServiceEndpointCellRenderer());
             
-            final ServiceFilter filter = new ServiceFilter(document);
-            final TableRowSorter<TableModel> sorter = new TableRowSorter(this.getModel());
+            filter = new ServiceFilter(document);
+            sorter = new TableRowSorter(this.getModel());
             sorter.setRowFilter(filter);
             sorter.setSortable(2, false);
             setRowSorter(sorter);
@@ -195,34 +195,6 @@ public class WSDLTablePane extends BlockablePanel {
                 } catch (Exception ex) {
                     Logger.getLogger(WSDLTableModel.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            }
-        }
-    }
-    
-    public static class ServiceFilter extends RowFilter<TableModel, Integer> {
-        private final PlainDocument document;
-
-        public ServiceFilter(PlainDocument document) {
-            this.document = document;
-        }
-        
-        @Override
-        public boolean include(Entry<? extends TableModel, ? extends Integer> entry) {
-            final int length = document.getLength();
-            if (length == 0) {
-                return true;
-            }
-            try {
-                final String filter = document.getText(0, length);
-            
-                OWLNamedIndividual service = (OWLNamedIndividual)entry.getValue(2);
-                String label = BioswrOntology.getInstance().getLabel(service.getIRI());
-                if (label == null) {
-                    label = service.getIRI().toString();
-                }
-                return label.toUpperCase().contains(filter.toUpperCase());
-            } catch(BadLocationException ex) {
-                return false;
             }
         }
     }

@@ -133,7 +133,8 @@ public class WSDLTablePane extends BlockablePanel {
             TableColumn col3 = getColumnModel().getColumn(3);
             col3.setCellRenderer(new ServiceEndpointCellRenderer());
             
-            filter = new ServiceFilter(document);
+            filter = new ServiceFilter();
+            
             sorter = new TableRowSorter(this.getModel());
             sorter.setRowFilter(filter);
             sorter.setSortable(2, false);
@@ -167,7 +168,9 @@ public class WSDLTablePane extends BlockablePanel {
                     }                    
                 }
                 private void updateTableModel() throws BadLocationException {
-                    serviceCellRenderer.setFilter(document.getText(0, document.getLength()));
+                    final String text = document.getText(0, document.getLength());
+                    filter.setServiceName(text);
+                    serviceCellRenderer.setFilter(text);
                     sorter.setRowFilter(filter);
                 }
             });

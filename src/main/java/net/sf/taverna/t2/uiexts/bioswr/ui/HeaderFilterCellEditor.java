@@ -26,12 +26,10 @@ package net.sf.taverna.t2.uiexts.bioswr.ui;
 
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Graphics;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.util.EventObject;
 import javax.swing.DefaultCellEditor;
-import javax.swing.JLayeredPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.event.CellEditorListener;
